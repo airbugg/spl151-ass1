@@ -40,12 +40,24 @@ void calc_stress_factor(map<string, vector<float> >& junc_map, char filename[]) 
 
 	if (myfile.is_open()) {
 
-		while(getline(myfile,line)) {																	// sum # of routes going through each road
+		while(getline(myfile,line)) {		
 
-			for (size_t i = 0; i+4 < line.size(); i += 3) {
+			// initialize indices to help iterate through each line, grabbing one road at a time
+			size_t begin = 0;
+			size_t mid = line.find(',');
+			size_t end = line.find(',',mid+1);
 
-				junc_map[line.substr(i,5)][1] += 1;
+			while(end!=std::string::npos) {																// iterate until we reach end of line
+
+				junc_map[line.substr(begin,end - begin)][1] += 1;
+
+				begin = mid +1;
+				mid = end;
+				end = line.find(',',mid+1);
+
 			}
+			junc_map[line.substr(begin)][1] += 1;														// tie up loose ends..
+			
 		}
 																										// calc stress factor
 		for (map<string, vector<float> >::iterator it=junc_map.begin(); it!=junc_map.end(); ++it) {
@@ -73,11 +85,11 @@ void export_stress_factor(map<string, vector<float> >& junc_map, char newfilenam
 
 int main () {
 
-	map<string, vector<float> > junc_map = build_junc_map((char*) "Roads.conf");
+	map<string, vector<float> > junc_map = build_junc_map((char*) "../Roads.conf");
 	
-	calc_stress_factor(junc_map,(char*) "Routes.conf");
+	calc_stress_factor(junc_map,(char*) "../Routes.conf");
 
-	export_stress_factor(junc_map,(char*) "RoadStress.out");
+	export_stress_factor(junc_map,(char*) "../RoadStress.out");
 
 	return 0;
 }

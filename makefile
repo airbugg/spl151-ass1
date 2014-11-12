@@ -1,13 +1,13 @@
 
 # Flags
 CC = g++
-CFLAGS = -g -Wall -Weffc++
+CFLAGS = -g -Wall -Weffc++ -Linclude
 
 # Executable "road_maintenance" depends on road_maintenance.o
 road_maintenance: bin/road_maintenance.o
 	@echo 'Building target: road_maintenance'
 	@echo 'Invoking: C++ Linker'
-	$(CC)  -o bin/road_maintenance bin/road_maintenance.o
+	$(CC)  -o bin/RoadStress bin/road_maintenance.o
 	@echo 'Finished building target.'
 
  	
@@ -17,3 +17,4 @@ bin/road_maintenance.o: src/road_maintenance.cpp include/road_maintenance.hpp
 # Clean build directory
 clean:
 	rm -rf bin/*
+	rm -rf RoadStress.out
